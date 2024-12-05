@@ -12,7 +12,8 @@ optimizer:
   betas: [0.8, 0.99]
   weight_decay: 0.01
 lr_scheduler:
-  _target_: torch.optim.lr_scheduler.ExponentialLR
+  _target_: torch.optim.lr_scheduler.StepLR
+  step_size: ${trainer.epoch_len}
   gamma: 0.999
 loss_function:
   _target_: src.loss.GanLoss
