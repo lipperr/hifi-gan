@@ -8,13 +8,13 @@ class CustomDirDataset(BaseDataset):
     """
     Dataset of text samples to synthesize audio.
     """
-    def __init__(self, transcription_dir, query=None, *args, **kwargs):
+    def __init__(self, transcription_dir, query=None, save_path="", *args, **kwargs):
         data = []
 
         if query is not None:
             data.append({"utterance_id": "my_query", "text": query})
             return
-
+        
         if not Path(transcription_dir + "/transcriptions").exists():
             print("WARNING: no folder 'transcriptions'. Searching for .csv file to create index...")
             assert Path(transcription_dir + "/metadata.csv").exists(), "Can't synthesize audio without transcriptions."
@@ -25,13 +25,14 @@ class CustomDirDataset(BaseDataset):
                 ids_trs = [ (x.split('|')[0], x.split('|')[2]) for x in lines if len(x) > 0]
 
             print("Found transcriptions in .csv file!")
-            if os.access(transcription_dir, os.W_OK):
-                transcriptions_dir = os.path.join(transcription_dir, "transcriptions")
+            if os.access(transcription_dir, os.W_OK) or os.access(save_path, os.W_OK):
+                transcriptions_dir = os.path.join(transcription_dir, "transcriptions") if os.access(transcription_dir, os.W_OK) else os.path.join(save_path, "transcriptions")
                 os.makedirs(transcriptions_dir, exist_ok=True)
                 for (id, text) in tqdm(ids_trs, desc=f"Preparing transcriptions folder..."):
                     file_path = os.path.join(transcriptions_dir, f"{id}.txt")
                     with open(file_path, "w", encoding="utf-8") as f:
                         f.write(text)
+                
             else:
                 print("Can't create transcriptions folder, preparing dataset from .csv file.")
                 
@@ -39,8 +40,9 @@ class CustomDirDataset(BaseDataset):
                     entry = {"utterance_id": id, "text": text}
                     data.append(entry)
 
-        if Path(transcription_dir + "/transcriptions").exists():
-            for path in Path(transcription_dir + "/transcriptions").iterdir():
+        if Path(transcription_dir + "/transcriptions").exists() or Path(save_path + "/transcriptions").exists():
+            dir = transcription_dir + "/transcriptions" if Path(transcription_dir + "/transcriptions").exists() else save_path + "/transcriptions"
+            for path in Path(dir).iterdir():
                 entry = {}
                 if path.suffix == ".txt":
                     entry["utterance_id"] = path.stem
