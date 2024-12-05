@@ -120,11 +120,12 @@ class SubMSD(nn.Module):
         self.norm = norm
 
         self.convs = nn.ModuleList([
-            self.norm(Conv1d(1, 64, kernel_size=15, stride=1, padding=7)),
-            self.norm(Conv1d(64, 128, kernel_size=41, stride=4, groups=4, padding=20)),
-            self.norm(Conv1d(128, 256, kernel_size=41, stride=4, groups=16, padding=20)),
+            self.norm(Conv1d(1, 128, kernel_size=15, stride=1, padding=7)),
+            self.norm(Conv1d(128, 128, kernel_size=41, stride=2, groups=4, padding=20)),
+            self.norm(Conv1d(128, 256, kernel_size=41, stride=2, groups=16, padding=20)),
             self.norm(Conv1d(256, 512, kernel_size=41, stride=4, groups=16, padding=20)),
             self.norm(Conv1d(512, 1024, kernel_size=41, stride=4, groups=16, padding=20)),
+            self.norm(Conv1d(1024, 1024, kernel_size=41, stride=1, groups=16, padding=20)),
             self.norm(Conv1d(1024, 1024, kernel_size=5, stride=1, padding=2)),
             self.norm(Conv1d(1024, 1, kernel_size=3, stride=1, padding=1))
         ])
