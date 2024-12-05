@@ -1,0 +1,8 @@
+train:
+  _target_: src.datasets.LJSpeechDataset
+  audio_dir: "LJSpeech"
+
+val:
+  _target_: src.datasets.CustomDirDataset
+  transcription_dir: "LJSpeech"
+

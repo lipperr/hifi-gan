@@ -1,0 +1,5 @@
+test:
+  _target_: src.datasets.CustomDirDataset
+  transcription_dir: "LJSpeech"
+  query: ${inferenser.query}
+

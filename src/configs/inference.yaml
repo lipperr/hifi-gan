@@ -1,0 +1,14 @@
+defaults:
+  - model: hifigan
+  - metrics: example
+  - datasets: custom # we do not want to run inference on training data
+  - dataloader: example
+  - transforms: no_transforms
+  - _self_
+inferencer:
+  query: null
+  save_path: "generated"
+  device_tensors: [] # which tensors should be on device (ex. GPU)
+  device: auto # device name or "auto"
+  seed: 1
+  from_pretrained: "saved/model_best.pth" # path to the pretrained model
