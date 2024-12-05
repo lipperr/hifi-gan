@@ -89,24 +89,23 @@ class Trainer(BaseTrainer):
         # method to log data from you batch
         # such as audio, text or images, for example
 
-        self.log_audio(mode, **batch)
+        self.log_audio(**batch)
+        self.log_melspectrogram(**batch)
 
 
-    def log_audio(self, mode, **batch):
+    def log_audio(self, audio_pred, **batch):
         if "audio" in batch:
             self.writer.add_audio(f"audio", batch["audio"][0], 22050)
-        if "audio_pred" in batch:
-            self.writer.add_audio(f"audio_pred", batch["audio_pred"][0], 22050)
-
+        self.writer.add_audio(f"audio_pred", audio_pred[0], 22050)
 
     def log_melspectrogram(self, melspectrogram, melspectrogram_pred, **batch):
-
-        melspectrogram_for_plot = melspectrogram[0].detach().cpu()
-        image = plot_melspectrogram(melspectrogram_for_plot, sr=22050, hop_length=MelSpectrogramConfig.hop_length)
+        
+        melspectrogram_for_plot = melspectrogram[0].detach().cpu().squeeze(0)
+        image = plot_melspectrogram(melspectrogram_for_plot)
         self.writer.add_image("melspectrogram", image)
 
-        melspectrogram_pred_for_plot = melspectrogram_pred[0].detach().cpu()
-        image_pred = plot_melspectrogram(melspectrogram_pred_for_plot, sr=22050, hop_length=MelSpectrogramConfig.hop_length)
+        melspectrogram_pred_for_plot = melspectrogram_pred[0].detach().cpu().squeeze(0)
+        image_pred = plot_melspectrogram(melspectrogram_pred_for_plot)
         self.writer.add_image("melspectrogram_pred", image_pred)
 
     def log_predictions(

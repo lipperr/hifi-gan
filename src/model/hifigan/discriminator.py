@@ -44,10 +44,10 @@ class SubMPD(nn.Module):
         self.period = period
         self.norm = norm
         self.convs = nn.ModuleList()
-        in_channels, out_channels = 1, 2 ** 5
+        in_channels, channels = 1, [32, 128, 512, 1024]
 
-        for _ in range(4):
-            out_channels *= 2
+        for i in range(4):
+            out_channels = channels[i]
             self.convs.append(self.norm(Conv2d(in_channels, out_channels, kernel_size=(5, 1), stride=(3, 1), padding=(2, 0))))
             in_channels = out_channels
         
@@ -120,11 +120,11 @@ class SubMSD(nn.Module):
         self.norm = norm
 
         self.convs = nn.ModuleList([
-            self.norm(Conv1d(1, 16, kernel_size=15, stride=1, padding=7)),
-            self.norm(Conv1d(16, 64, kernel_size=41, stride=4, groups=4, padding=20)),
-            self.norm(Conv1d(64, 256, kernel_size=41, stride=4, groups=16, padding=20)),
-            self.norm(Conv1d(256, 1024, kernel_size=41, stride=4, groups=64, padding=20)),
-            self.norm(Conv1d(1024, 1024, kernel_size=41, stride=4, groups=256, padding=20)),
+            self.norm(Conv1d(1, 64, kernel_size=15, stride=1, padding=7)),
+            self.norm(Conv1d(64, 128, kernel_size=41, stride=4, groups=4, padding=20)),
+            self.norm(Conv1d(128, 256, kernel_size=41, stride=4, groups=16, padding=20)),
+            self.norm(Conv1d(256, 512, kernel_size=41, stride=4, groups=16, padding=20)),
+            self.norm(Conv1d(512, 1024, kernel_size=41, stride=4, groups=16, padding=20)),
             self.norm(Conv1d(1024, 1024, kernel_size=5, stride=1, padding=2)),
             self.norm(Conv1d(1024, 1, kernel_size=3, stride=1, padding=1))
         ])

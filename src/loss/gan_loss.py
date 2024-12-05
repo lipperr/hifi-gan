@@ -45,7 +45,7 @@ class GanLoss(nn.Module):
         loss_mel = self.mel_loss(**batch)
 
         loss = loss_adv + loss_fm + loss_mel
-        return {"loss_gen": loss}
+        return {"loss_gen": loss, "feature_matching_loss": loss_fm, "mel_loss": loss_mel, "loss_gen_adv": loss_adv}
     
     
     def disc(

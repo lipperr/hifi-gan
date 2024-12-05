@@ -45,7 +45,7 @@ def plot_images(imgs, config):
     return image
 
 
-def plot_melspectrogram(melspectrogram, sr, hop_length, name=None):
+def plot_melspectrogram(melspectrogram, name=None):
     """
     Plot spectrogram
 
@@ -56,11 +56,7 @@ def plot_melspectrogram(melspectrogram, sr, hop_length, name=None):
         image (Image): image of the spectrogram
     """
     plt.figure(figsize=(20, 5))
-    # plt.pcolormesh(melspectrogram)
-    mel_DB = librosa.power_to_db(melspectrogram.numpy(), ref=np.max)
-    image = librosa.display.specshow(mel_DB, sr=sr, hop_length=hop_length, x_axis='time', y_axis='mel');
-    plt.colorbar(format='%+2.0f dB');
-
+    plt.pcolormesh(melspectrogram)
     plt.title(name)
     buf = io.BytesIO()
     plt.savefig(buf, format="png")
@@ -68,7 +64,6 @@ def plot_melspectrogram(melspectrogram, sr, hop_length, name=None):
 
     # convert buffer to Tensor
     image = ToTensor()(PIL.Image.open(buf))
-
 
     plt.close()
     return image
