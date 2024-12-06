@@ -9,7 +9,7 @@ class Generator(nn.Module):
 
     def __init__(self, hidden_dim=128, ks_convT=[16, 16, 4, 4], ks_resblocks=[3, 7, 11], d_resblocks=[[1, 3, 5], [1, 3, 5], [1, 3, 5]]):
         super(Generator, self).__init__()
-        self.conv1 = weight_norm(Conv1d(in_channels=80, out_channels=hidden_dim, kernel_size=7, padding=3, dilation=1))
+        self.conv1 = weight_norm(Conv1d(in_channels=80, out_channels=hidden_dim, kernel_size=7, stride=1, padding=3))
 
         self.upsample_convT = nn.ModuleList()
         for i, k in enumerate(ks_convT):
@@ -56,7 +56,7 @@ class MRF(nn.Module):
     def forward(self, x):
         x = self.resblocks[0](x)
         for i in range(1, len(self.resblocks)):
-            x = x +  self.resblocks[i](x)
+            x = x + self.resblocks[i](x)
         x = x / len(self.resblocks)
         return x
     
