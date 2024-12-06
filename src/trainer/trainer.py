@@ -53,7 +53,6 @@ class Trainer(BaseTrainer):
             if self.lr_scheduler[0] is not None:
                 self.lr_scheduler[0].step()
 
-            torch.autograd.set_detect_anomaly(True)
             self.optimizer[1].zero_grad()
             outputs_disc = self.model.discriminator(**batch)
             batch.update(outputs_disc)
