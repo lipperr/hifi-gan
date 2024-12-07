@@ -133,7 +133,10 @@ class Trainer(BaseTrainer):
                 ) for wav in audio_pred[:examples_to_log]]
 
         mos_metric = self.metrics['inference'][0]
-        rows["mos"] = [mos_metric(wav) for wav in audio_pred[:examples_to_log]]
+        if "audio_len" in batch:
+            rows["mos"] = [mos_metric(wav, wav_len) for (wav, wav_len) in zip(audio_pred[:examples_to_log], batch["audio_len"][:examples_to_log])]
+        else:
+            rows["mos"] = [mos_metric(wav) for wav in audio_pred[:examples_to_log]]
 
         df = pd.DataFrame.from_dict(rows)
         df.index = [id for id in utterance_id[:examples_to_log]]

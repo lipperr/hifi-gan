@@ -10,3 +10,4 @@ val:
 test:
   _target_: src.datasets.LJSpeechDataset
   audio_dir: "test_data"
+  cut: False

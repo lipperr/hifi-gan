@@ -5,8 +5,9 @@ from src.datasets.base_dataset import BaseDataset
 
 
 class LJSpeechDataset(BaseDataset):
-    def __init__(self, audio_dir, *args, **kwargs):
+    def __init__(self, audio_dir, cut=True, *args, **kwargs):
         self.type="audio"
+        self.cut = cut
         data = []
         for path in Path(audio_dir + "/wavs").iterdir():
             entry = {}
@@ -28,13 +29,15 @@ class LJSpeechDataset(BaseDataset):
 
         entry = self._index[idx]
         audio = self.load_audio(entry["path"])
-        wav_len = 8192
-        audio_start = torch.randint(low=0, high=audio.shape[1] - wav_len, size=(1,))
-        audio = audio[:, audio_start: audio_start + wav_len]
-        
+        length = audio.shape[1]
+        if self.cut == True:
+            wav_len = 8192
+            audio_start = torch.randint(low=0, high=audio.shape[1] - wav_len, size=(1,))
+            audio = audio[:, audio_start: audio_start + wav_len]
+            
 
         instance_data = {
-            "audio_len": entry["audio_len"],
+            "audio_len": length,
             "audio": audio,
             "path": entry["path"],
             "utterance_id": entry["utterance_id"]

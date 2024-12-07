@@ -74,8 +74,8 @@ class MelSpectrogramText(nn.Module):
         self.tacotron2 = Tacotron2.from_hparams(source="speechbrain/tts-tacotron2-ljspeech", savedir="tmpdir_tts")
 
     def forward(self, txt):
-        mel_output, mel_length, alignment = self.tacotron2.encode_text(txt)
-        # alignment - attention weights
+        mel_output, _, _ = self.tacotron2.encode_text(txt)
+        
         return mel_output
 
 

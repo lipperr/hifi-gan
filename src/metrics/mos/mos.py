@@ -14,11 +14,17 @@ class MOS(BaseMetric):
         self.resample.to(self.device)
         super(MOS, self).__init__()
 
-    def __call__(self, audio_pred, **kwargs):
+    def __call__(self, audio_pred, length=None, **kwargs):
         metric = 0
-        for wav in audio_pred:
+        for i, wav in enumerate(audio_pred):
             audio = torch.clone(wav).squeeze(0)
             out = self.resample(audio)
+
+            if length is not None:
+                out = out[:length].clone()
+            elif "audio_len" in kwargs:
+                out = out[:kwargs["audio_len"][i]].clone()
+            
             metric += self.model(out)
         metric /= audio_pred.shape[0]
         return metric.item()
