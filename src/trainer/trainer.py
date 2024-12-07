@@ -123,10 +123,10 @@ class Trainer(BaseTrainer):
         ]
         rows["audio_pred"] = [wandb.Audio(
                     wav.detach().cpu().numpy().T, sample_rate=22050
-                ) for wav in audio_pred]
+                ) for wav in audio_pred[:examples_to_log]]
 
         mos_metric = self.metrics['inference'][0]
-        rows["mos"] = [mos_metric(wav) for wav in audio_pred]
+        rows["mos"] = [mos_metric(wav) for wav in audio_pred[:examples_to_log]]
 
         df = pd.DataFrame.from_dict(rows)
         df.index = [id for id in utterance_id[:examples_to_log]]

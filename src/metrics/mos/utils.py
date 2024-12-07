@@ -7,6 +7,10 @@ import tqdm
 import numpy as np
 from torch import nn
 
+
+# https://github.com/AndreevP/wvmos
+
+
 def extract_prefix(prefix, weights):
     result = OrderedDict()
     for key in weights:
@@ -84,27 +88,3 @@ class Wav2Vec2MOS(nn.Module):
         if self.freeze:
             self.encoder.eval()
             
-    # def calculate_dir(self, path, mean=True):
-        
-    #     pred_mos = []
-    #     for path in tqdm.tqdm(sorted(glob.glob(f"{path}/*.wav"))):
-    #         signal = librosa.load(path, sr=16_000)[0]
-    #         x = self.processor(signal, return_tensors="pt", padding=True, sampling_rate=16000).input_values
-    #         if self.cuda_flag:
-    #             x = x.cuda()
-    #         with torch.no_grad():
-    #             res = self.forward(x).mean()
-    #         pred_mos.append(res.item())
-    #     if mean:
-    #         return np.mean(pred_mos)
-    #     else:
-    #         return pred_mos
-        
-    # def calculate_one(self, path):
-    #     signal = librosa.load(path, sr=16_000)[0]
-    #     x = self.processor(signal, return_tensors="pt", padding=True, sampling_rate=16000).input_values
-    #     with torch.no_grad():
-    #         if self.cuda_flag:
-    #             x = x.cuda()
-    #         res = self.forward(x).mean()
-    #     return res.cpu().item()

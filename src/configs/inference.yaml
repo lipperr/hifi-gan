@@ -6,9 +6,9 @@ defaults:
   - transforms: no_transforms
   - _self_
 inferencer:
-  query: null
+  query: ""
   save_path: "generated"
-  device_tensors: [] # which tensors should be on device (ex. GPU)
+  device_tensors: ["melspectrogram"] # which tensors should be on device (ex. GPU)
   device: auto # device name or "auto"
   seed: 1
   from_pretrained: "saved/model_best.pth" # path to the pretrained model

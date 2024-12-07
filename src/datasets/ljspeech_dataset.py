@@ -6,6 +6,7 @@ from src.datasets.base_dataset import BaseDataset
 
 class LJSpeechDataset(BaseDataset):
     def __init__(self, audio_dir, *args, **kwargs):
+        self.type = "audio"
         data = []
         for path in Path(audio_dir + "/wavs").iterdir():
             entry = {}
@@ -38,7 +39,4 @@ class LJSpeechDataset(BaseDataset):
         }
 
         instance_data = self.preprocess_data(instance_data)
-        # melspec = self.melspectrogram(instance_data["audio"])
-        # instance_data.update({"melspectrogram": melspec})
-
         return instance_data

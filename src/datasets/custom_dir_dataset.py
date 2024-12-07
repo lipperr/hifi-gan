@@ -8,11 +8,13 @@ class CustomDirDataset(BaseDataset):
     """
     Dataset of text samples to synthesize audio.
     """
-    def __init__(self, transcription_dir, query=None, save_path="", *args, **kwargs):
+    def __init__(self, transcription_dir, query="", save_path="", *args, **kwargs):
+        self.type = "text"
         data = []
-
-        if query is not None:
-            data.append({"utterance_id": "my_query", "text": query})
+        self.melspectrogram = MelSpectrogramText()
+        if query != "":
+            data.append({"utterance_id": "my_query", "text": query, "text_len": len(query)})
+            super().__init__(data, *args, **kwargs)
             return
         
         if not Path(transcription_dir + "/transcriptions").exists():
@@ -37,7 +39,7 @@ class CustomDirDataset(BaseDataset):
                 print("Can't create transcriptions folder, preparing dataset from .csv file.")
                 
                 for id, text in ids_trs:
-                    entry = {"utterance_id": id, "text": text}
+                    entry = {"utterance_id": id, "text": text, "text_len": len(text)}
                     data.append(entry)
 
         if Path(transcription_dir + "/transcriptions").exists() or Path(save_path + "/transcriptions").exists():
@@ -50,17 +52,11 @@ class CustomDirDataset(BaseDataset):
                         entry["text"] = f.read().strip()
                         entry["text_len"] = len(entry["text"])
 
-                    if Path(transcription_dir + "/wavs/" + path.stem + ".wav").exists():
-                        audio_path = transcription_dir + "/wavs/" + path.stem + ".wav"
-                        entry["audio_path"] = audio_path
-
                 if len(entry) > 0:
                     data.append(entry)
 
         if len(data) == 0:
             print("WARNING: no transcriptions provided for synthesis.")
-
-        self.melspectrogram = MelSpectrogramText()
         super().__init__(data, *args, **kwargs)
         
     def __getitem__(self, idx):
@@ -70,10 +66,8 @@ class CustomDirDataset(BaseDataset):
         instance_data = {
             "melspectrogram": melspec,
             "utterance_id": entry["utterance_id"],
-            "text": entry["text"]
+            "text": entry["text"],
+            "text_len": entry["text_len"]
             }
-        if "audio_path" in entry.keys():
-            audio = self.load_audio(entry["audio_path"])
-            instance_data.update({"audio": audio})
         return instance_data
         
