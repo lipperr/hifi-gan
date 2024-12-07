@@ -506,7 +506,6 @@ class BaseTrainer:
         checkpoint = torch.load(resume_path, self.device)
         self.start_epoch = checkpoint["epoch"] + 1
         self.mnt_best = checkpoint["monitor_best"]
-
         # load architecture params from checkpoint.
         if checkpoint["config"]["model"] != self.config["model"]:
             self.logger.warning(
@@ -517,10 +516,8 @@ class BaseTrainer:
 
         # load optimizer state from checkpoint only when optimizer type is not changed.
         if (
-            checkpoint["config"]["optimizer_disc"] != self.config["optimizer"]
-            or checkpoint["config"]["optimizer_gen"] != self.config["optimizer"]
-            or checkpoint["config"]["lr_scheduler_disc"] != self.config["lr_scheduler"]
-            or checkpoint["config"]["lr_scheduler_gen"] != self.config["lr_scheduler"]
+            checkpoint["config"]["optimizer"] != self.config["optimizer"]
+            or checkpoint["config"]["lr_scheduler"] != self.config["lr_scheduler"]
         ):
             self.logger.warning(
                 "Warning: Optimizer or lr_scheduler given in the config file is different "

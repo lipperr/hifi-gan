@@ -56,7 +56,7 @@ class MRF(nn.Module):
     def forward(self, x):
         x = self.resblocks[0](x)
         for i in range(1, len(self.resblocks)):
-            x = x +  self.resblocks[i](x)
+            x = x + self.resblocks[i](x)
         x = x / len(self.resblocks)
         return x
     

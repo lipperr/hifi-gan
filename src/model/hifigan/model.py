@@ -15,7 +15,7 @@ class HiFiGan(nn.Module):
     def generator(self, melspectrogram, **batch):
         
         audio_pred = self.gen(melspectrogram, **batch)
-        melspectrogram_pred = self.melspec(audio_pred)
+        melspectrogram_pred = self.melspec(audio_pred).squeeze(1)
 
         return {"audio_pred": audio_pred, "melspectrogram_pred": melspectrogram_pred}
 

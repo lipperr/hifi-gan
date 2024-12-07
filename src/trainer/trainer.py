@@ -1,10 +1,10 @@
 import torch
-
+from pathlib import Path
+import pandas as pd 
 from src.logger.utils import plot_melspectrogram
 from src.metrics.tracker import MetricTracker
 from src.trainer.base_trainer import BaseTrainer
-from src.datasets.mel_spec import MelSpectrogramConfig
-
+import wandb
 
 class Trainer(BaseTrainer):
     """
@@ -88,8 +88,13 @@ class Trainer(BaseTrainer):
         # method to log data from you batch
         # such as audio, text or images, for example
 
-        self.log_audio(**batch)
-        self.log_melspectrogram(**batch)
+        if self.is_train:
+            self.log_audio(**batch)
+            self.log_melspectrogram(**batch)
+        else:
+            self.log_predictions(**batch)
+            self.log_melspectrogram(**batch)
+
 
 
     def log_audio(self, audio_pred, **batch):
@@ -108,6 +113,21 @@ class Trainer(BaseTrainer):
         self.writer.add_image("melspectrogram_pred", image_pred)
 
     def log_predictions(
-        self, examples_to_log=10, **batch
+        self, text, audio_pred, utterance_id, examples_to_log=10, **batch
     ):
-        pass
+
+        rows = {}
+        rows["text"] = [
+            query for query in text[:examples_to_log]
+        ]
+        rows["audio_pred"] = [wandb.Audio(
+                    wav.detach().cpu().numpy().T, sample_rate=22050
+                ) for wav in audio_pred[:examples_to_log]]
+
+        mos_metric = self.metrics['inference'][0]
+        rows["mos"] = [mos_metric(wav) for wav in audio_pred[:examples_to_log]]
+
+        df = pd.DataFrame.from_dict(rows)
+        df.index = [id for id in utterance_id[:examples_to_log]]
+
+        self.writer.add_table("predictions from text", df)
