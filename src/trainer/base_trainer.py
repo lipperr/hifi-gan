@@ -515,9 +515,6 @@ class BaseTrainer:
         self.model.load_state_dict(checkpoint["state_dict"])
 
         # load optimizer state from checkpoint only when optimizer type is not changed.
-        print(checkpoint["config"]["optimizer"], checkpoint["config"]["lr_scheduler"])
-        print(self.config["optimizer"], self.config["lr_scheduler"])
-
         if (
             checkpoint["config"]["optimizer"] != self.config["optimizer"]
             or checkpoint["config"]["lr_scheduler"] != self.config["lr_scheduler"]

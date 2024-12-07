@@ -14,10 +14,9 @@ class MOS(BaseMetric):
 
     def __call__(self, audio_pred, **kwargs):
         metric = 0
-        with torch.no_grad():
-            for wav in audio_pred:
-                out = self.resample(wav.squeeze(0))
-                metric += self.model(out)
+        for wav in audio_pred:
+            out = self.resample(wav.squeeze(0))
+            metric += self.model(out)
         metric /= audio_pred.shape[0]
         return metric.item()
         
