@@ -36,10 +36,10 @@ class Collate:
                 
             elif key == "text":
                 result_batch["melspectrogram"] = pad_sequence(
-                    [self.melspectrogram(item[key]) for item in dataset_items],
+                    [self.melspectrogram(item[key]).squeeze(0).t() for item in dataset_items],
                     batch_first=True,
                 )
-                result_batch["melspectrogram"] = result_batch["melspectrogram"].squeeze(1)
+                result_batch["melspectrogram"] = result_batch["melspectrogram"].permute(0, 2, 1)
                 result_batch[key] = [item[key] for item in dataset_items]
             else:
                 result_batch[key] = [item[key] for item in dataset_items]

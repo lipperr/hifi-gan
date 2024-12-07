@@ -1,5 +1,5 @@
 test:
   _target_: src.datasets.CustomDirDataset
-  transcription_dir: "LJSpeech"
+  transcription_dir: "test_data"
   query: ${inferencer.query}
 

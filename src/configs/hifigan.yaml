@@ -1,9 +1,9 @@
 defaults:
   - model: hifigan
   - writer: wandb
-  - metrics: example
+  - metrics: mos
   - datasets: train
-  - dataloader: example
+  - dataloader: train
   - transforms: no_transforms
   - _self_
 optimizer:
@@ -13,7 +13,7 @@ optimizer:
   weight_decay: 0.01
 lr_scheduler:
   _target_: torch.optim.lr_scheduler.StepLR
-  step_size: ${trainer.epoch_len}
+  step_size: 200
   gamma: 0.999
 loss_function:
   _target_: src.loss.GanLoss

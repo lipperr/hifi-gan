@@ -95,8 +95,6 @@ class Trainer(BaseTrainer):
             self.log_predictions(**batch)
             self.log_melspectrogram(**batch)
 
-
-
     def log_audio(self, audio_pred, **batch):
         if "audio" in batch:
             self.writer.add_audio(f"audio", batch["audio"][0], 22050)
@@ -113,13 +111,23 @@ class Trainer(BaseTrainer):
         self.writer.add_image("melspectrogram_pred", image_pred)
 
     def log_predictions(
-        self, text, audio_pred, utterance_id, examples_to_log=10, **batch
+        self, audio_pred, utterance_id, examples_to_log=10, **batch
     ):
 
         rows = {}
-        rows["text"] = [
-            query for query in text[:examples_to_log]
-        ]
+
+        type = ""
+        if "text" in batch:
+            type =  "text"
+            rows["text"] = [
+                query for query in batch["text"][:examples_to_log]
+            ]
+        if "audio" in batch:
+            type = "wav"
+            rows["audio_true"] = [wandb.Audio(
+                    wav.detach().cpu().numpy().T, sample_rate=22050
+                ) for wav in batch["audio"][:examples_to_log]]
+
         rows["audio_pred"] = [wandb.Audio(
                     wav.detach().cpu().numpy().T, sample_rate=22050
                 ) for wav in audio_pred[:examples_to_log]]
@@ -130,4 +138,4 @@ class Trainer(BaseTrainer):
         df = pd.DataFrame.from_dict(rows)
         df.index = [id for id in utterance_id[:examples_to_log]]
 
-        self.writer.add_table("predictions from text", df)
+        self.writer.add_table(f"predictions from {type}", df)

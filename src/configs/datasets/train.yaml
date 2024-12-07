@@ -5,5 +5,8 @@ train:
 val:
   _target_: src.datasets.CustomDirDataset
   transcription_dir: "LJSpeech"
-  limit: 64
+  limit: 50
 
+test:
+  _target_: src.datasets.LJSpeechDataset
+  audio_dir: "test_data"

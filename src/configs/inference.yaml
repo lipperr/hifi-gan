@@ -1,8 +1,8 @@
 defaults:
   - model: hifigan
-  - metrics: example
-  - datasets: custom # we do not want to run inference on training data
-  - dataloader: example
+  - metrics: mos
+  - datasets: custom_text2mel # we do not want to run inference on training data
+  - dataloader: inference
   - transforms: no_transforms
   - _self_
 inferencer:

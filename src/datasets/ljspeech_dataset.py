@@ -6,12 +6,13 @@ from src.datasets.base_dataset import BaseDataset
 
 class LJSpeechDataset(BaseDataset):
     def __init__(self, audio_dir, *args, **kwargs):
-        self.type = "audio"
+        self.type="audio"
         data = []
         for path in Path(audio_dir + "/wavs").iterdir():
             entry = {}
             if path.suffix == ".wav":
                 entry["path"] = str(path)
+                entry["utterance_id"] = str(path.stem)
                 t_info = torchaudio.info(str(path))
                 length = t_info.num_frames / t_info.sample_rate
                 entry["audio_len"] = length
@@ -35,8 +36,10 @@ class LJSpeechDataset(BaseDataset):
         instance_data = {
             "audio_len": entry["audio_len"],
             "audio": audio,
-            "path": entry["path"]
+            "path": entry["path"],
+            "utterance_id": entry["utterance_id"]
         }
 
         instance_data = self.preprocess_data(instance_data)
+
         return instance_data
