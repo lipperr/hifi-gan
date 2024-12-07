@@ -1,2 +1,6 @@
-train: [] # metrics that are calculated during training
-inference: [] # metrics that are calculated during inference (eval)
+train: 
+  - _target_: src.metrics.MOS
+    name: "MOS" # metrics that are calculated during training
+inference: 
+  - _target_: src.metrics.MOS
+    name: "MOS" # metrics that are calculated during training

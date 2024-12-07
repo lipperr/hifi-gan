@@ -12,6 +12,8 @@ comet_ml
 hydra-core
 speechbrain
 librosa
+transformers
+pytorch_lightning
 
 black
 isort
