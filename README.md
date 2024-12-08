@@ -14,7 +14,8 @@ This repository contains a template for solving part of the TTS task with PyTorc
 
 See the task assignment [here](https://github.com/markovka17/dla/tree/2024/hw3_nv).
 
-See wandb experiments with logged generated audio samples in the [task report]().
+See wandb experiments with logged generated audio samples in the [task report](https://api.wandb.ai/links/lipperrdino/g6clt6d5
+).
 
 ## Installation
 
@@ -56,7 +57,7 @@ Follow these steps to install the project:
    pre-commit install
    ```
 
-## How to train and respoduce the results of the best model saved at [google drive link]():
+## How to train and respoduce the results of the best model saved at [google drive link](https://drive.google.com/file/d/1bduk4t_2lpBduSBpkycQydCaINyp4wFU/view?usp=sharing):
 
 To train a model, run the following command:
 
@@ -128,6 +129,16 @@ python3 synthesize.py datasets=inference_wav2wav  datasets.test.audio_dir=<your 
 ```bash
 python3 synthesize.py datasets=custom_text2mel  inferencer.query="<your query>"
 ```
+
+## How to download best model weights 
+
+Run this command with the path where to download the weights:
+
+```bash
+python3 download_best_model.py --path <your path>
+```
+
+
 ## Credits
 
 This repository is based on a [PyTorch Project Template](https://github.com/Blinorot/pytorch_project_template).

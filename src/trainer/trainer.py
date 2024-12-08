@@ -127,6 +127,11 @@ class Trainer(BaseTrainer):
             rows["audio_true"] = [wandb.Audio(
                     wav.detach().cpu().numpy().T, sample_rate=22050
                 ) for wav in batch["audio"][:examples_to_log]]
+            
+        if "audio_gt" in batch:
+            rows["audio_true"] = [wandb.Audio(
+                    wav.T, sample_rate=22050
+                ) for wav in batch["audio_gt"][:examples_to_log]]
 
         rows["audio_pred"] = [wandb.Audio(
                     wav.detach().cpu().numpy().T, sample_rate=22050

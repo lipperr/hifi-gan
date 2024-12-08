@@ -52,6 +52,10 @@ class CustomDirDataset(BaseDataset):
                         entry["text"] = f.read().strip()
                         entry["text_len"] = len(entry["text"])
 
+                    if Path(transcription_dir + "/wavs/" + path.stem + ".wav").exists():
+                        audio_path = transcription_dir + "/wavs/" + path.stem + ".wav"
+                        entry["audio_path"] = audio_path
+
                 if len(entry) > 0:
                     data.append(entry)
 
@@ -69,5 +73,10 @@ class CustomDirDataset(BaseDataset):
             "text": entry["text"],
             "text_len": entry["text_len"]
             }
+        
+        if "audio_path" in entry.keys():
+            audio = self.load_audio(entry["audio_path"])
+            instance_data.update({"audio_gt": audio})
+        
         return instance_data
         
