@@ -1,0 +1,25 @@
+train:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 1
+  num_workers: 2
+  pin_memory: True
+inner_analysis:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 5
+  num_workers: 2
+  pin_memory: True
+external_analysis:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 5
+  num_workers: 2
+  pin_memory: True
+full_tts_inner_analysis:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 5
+  num_workers: 2
+  pin_memory: True
+full_tts_external_analysis:
+  _target_: torch.utils.data.DataLoader
+  batch_size: 5
+  num_workers: 2
+  pin_memory: True

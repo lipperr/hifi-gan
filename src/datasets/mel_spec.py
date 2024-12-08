@@ -71,7 +71,7 @@ class MelSpectrogramText(nn.Module):
 
     def __init__(self):
         super(MelSpectrogramText, self).__init__()
-        self.tacotron2 = Tacotron2.from_hparams(source="speechbrain/tts-tacotron2-ljspeech", savedir="tmpdir_tts")
+        self.tacotron2 = Tacotron2.from_hparams(source="speechbrain/tts-tacotron2-ljspeech", savedir="tmpdir_tts", overrides={"max_decoder_steps": 5000})
 
     def forward(self, txt):
         mel_output, _, _ = self.tacotron2.encode_text(txt)

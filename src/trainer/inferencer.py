@@ -138,8 +138,6 @@ class Inferencer(BaseTrainer):
             # https://github.com/pytorch/pytorch/issues/1995
             generated = batch["audio_pred"][i].clone()
             utterance_id = batch["utterance_id"][i]
-            if "audio_len" in batch:
-                generated = generated[:batch["audio_len"][i]]
             if self.save_path is not None:
                 torchaudio.save(self.save_path / part /  f"{utterance_id}.wav", generated, sample_rate=22050)
 

@@ -1,0 +1,24 @@
+train:
+  _target_: src.datasets.LJSpeechDataset
+  audio_dir: "LJSpeech"
+  limit: 1
+
+inner_analysis:
+  _target_: src.datasets.LJSpeechDataset
+  audio_dir: "LJSpeech"
+  limit: 5
+  cut: False
+
+external_analysis:
+  _target_: src.datasets.LJSpeechDataset
+  audio_dir: "test_data"
+  cut: False
+
+full_tts_inner_analysis:
+  _target_: src.datasets.CustomDirDataset
+  transcription_dir: "LJSpeech"
+  limit: 5
+
+full_tts_external_analysis:
+  _target_: src.datasets.CustomDirDataset
+  transcription_dir: "test_data"
